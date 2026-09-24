@@ -146,6 +146,21 @@ function parseTsv(text) {
     comment = row.length > 6 ? row[6].trim() : "";
     author = row.length > 7 ? row[7].trim() : "";
   } else {
+  if (row.length < 6) return;
+
+  question = row[0].trim();
+
+  // Original OpenStudyCards format:
+  // Question | CorrectIndex(0-3) | A | B | C | D
+  if (/^[0-3]$/.test(row[1].trim())) {
+    options = row.slice(2, 6).map(v => v.trim());
+
+    // Convert 0-3 into the existing parser's 1-4 format
+    correctRaw = String(Number(row[1].trim()) + 1);
+
+    comment = row.length > 6 ? row[6].trim() : "";
+    author = row.length > 7 ? row[7].trim() : "";
+  } else {
     // Alternative format:
     // Question | A | B | C | D | Correct
     options = row.slice(1, 5).map(v => v.trim());
@@ -154,6 +169,7 @@ function parseTsv(text) {
     comment = row.length > 6 ? row[6].trim() : "";
     author = row.length > 7 ? row[7].trim() : "";
   }
+}
 }
 
     if (!question || options.length < 2 || !correctRaw) return;
