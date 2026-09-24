@@ -84,13 +84,17 @@ async function loadSelectedFile(event) {
 /*
 Supported TSV formats:
 
-1) Six to eight columns without a header:
-   Question    Answer A    Answer B    Answer C    Answer D    Correct    Comment    Author
+1) Original OpenStudyCards format:
+   Question    CorrectIndex(0-3)    Answer A    Answer B    Answer C    Answer D    Comment    Author
 
    Comment and Author are optional.
+
+2) Alternative six to eight columns without a header:
+   Question    Answer A    Answer B    Answer C    Answer D    Correct    Comment    Author
+
    Correct may be A/B/C/D, 1/2/3/4, or the exact correct answer text.
 
-2) Header-based TSV. Recognized names include:
+3) Header-based TSV. Recognized names include:
    question/prompt
    a/answer_a/option_a
    b/answer_b/option_b
@@ -130,47 +134,27 @@ function parseTsv(text) {
       correctRaw = valueAt(row, headerMap.correct);
       comment = valueAt(row, headerMap.comment);
       author = valueAt(row, headerMap.author);
-    } else else {
-  if (row.length < 6) return;
+    } else {
+      if (row.length < 6) return;
 
-  question = row[0].trim();
+      question = row[0].trim();
 
-  // Original OpenStudyCards format:
-  // Question | CorrectIndex(0-3) | A | B | C | D
-  if (/^[0-3]$/.test(row[1].trim())) {
-    options = row.slice(2, 6).map(v => v.trim());
-
-    // Convert 0-3 into the existing parser's 1-4 format
-    correctRaw = String(Number(row[1].trim()) + 1);
-
-    comment = row.length > 6 ? row[6].trim() : "";
-    author = row.length > 7 ? row[7].trim() : "";
-  } else {
-  if (row.length < 6) return;
-
-  question = row[0].trim();
-
-  // Original OpenStudyCards format:
-  // Question | CorrectIndex(0-3) | A | B | C | D
-  if (/^[0-3]$/.test(row[1].trim())) {
-    options = row.slice(2, 6).map(v => v.trim());
-
-    // Convert 0-3 into the existing parser's 1-4 format
-    correctRaw = String(Number(row[1].trim()) + 1);
-
-    comment = row.length > 6 ? row[6].trim() : "";
-    author = row.length > 7 ? row[7].trim() : "";
-  } else {
-    // Alternative format:
-    // Question | A | B | C | D | Correct
-    options = row.slice(1, 5).map(v => v.trim());
-    correctRaw = row[5].trim();
-
-    comment = row.length > 6 ? row[6].trim() : "";
-    author = row.length > 7 ? row[7].trim() : "";
-  }
-}
-}
+      // Original OpenStudyCards format:
+      // Question | CorrectIndex(0-3) | Answer A | Answer B | Answer C | Answer D | Comment | Author
+      if (/^[0-3]$/.test(row[1].trim())) {
+        options = row.slice(2, 6).map(v => v.trim());
+        correctRaw = String(Number(row[1].trim()) + 1);
+        comment = row.length > 6 ? row[6].trim() : "";
+        author = row.length > 7 ? row[7].trim() : "";
+      } else {
+        // Alternative format:
+        // Question | Answer A | Answer B | Answer C | Answer D | Correct | Comment | Author
+        options = row.slice(1, 5).map(v => v.trim());
+        correctRaw = row[5].trim();
+        comment = row.length > 6 ? row[6].trim() : "";
+        author = row.length > 7 ? row[7].trim() : "";
+      }
+    }
 
     if (!question || options.length < 2 || !correctRaw) return;
 
