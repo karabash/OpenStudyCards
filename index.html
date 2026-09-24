@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flashcards</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section id="setupView" class="panel">
+      <div class="brand">FLASHCARDS</div>
+      <h1 id="setupTitle">Choose a question file</h1>
+      <p class="muted">Select a TSV file from your computer. The file stays in your browser.</p>
+
+      <label class="file-picker">
+        <input id="fileInput" type="file" accept=".tsv,text/tab-separated-values,text/plain">
+        <span>Choose TSV File</span>
+      </label>
+
+      <div id="fileInfo" class="file-info hidden">
+        <strong id="fileName"></strong>
+        <span id="questionCount"></span>
+      </div>
+
+      <fieldset class="order-box">
+        <legend>Question order</legend>
+        <label>
+          <input type="radio" name="order" value="ordered" checked>
+          In file order
+        </label>
+        <label>
+          <input type="radio" name="order" value="random">
+          Random
+        </label>
+      </fieldset>
+
+      <button id="startButton" class="primary" disabled>Start Quiz</button>
+      <p id="setupError" class="error" role="alert"></p>
+    </section>
+
+    <section id="quizView" class="panel hidden">
+      <header class="quiz-header">
+        <div>
+          <div id="deckTitle" class="deck-title"></div>
+          <div id="counter" class="muted"></div>
+        </div>
+        <button id="changeFileButton" class="secondary small">Change file</button>
+      </header>
+
+      <div class="progress-track" aria-hidden="true">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+
+      <h2 id="questionText" class="question"></h2>
+      <div id="authorLine" class="author-line hidden"></div>
+      <div id="answers" class="answers"></div>
+
+      <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+      <div id="commentBox" class="comment-box hidden"></div>
+
+      <nav class="nav-row">
+        <button id="previousButton" class="secondary">← Previous</button>
+        <button id="nextButton" class="primary">Next →</button>
+      </nav>
+    </section>
+
+    <section id="resultsView" class="panel hidden">
+      <div class="brand">RESULTS</div>
+      <h1 id="resultsTitle"></h1>
+      <div id="score" class="score"></div>
+      <p id="scoreDetail" class="muted"></p>
+
+      <div class="result-actions">
+        <button id="reviewWrongButton" class="secondary">Review wrong answers</button>
+        <button id="restartButton" class="primary">Restart deck</button>
+        <button id="newFileButton" class="secondary">Choose another file</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

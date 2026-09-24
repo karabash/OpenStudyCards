@@ -1,0 +1,4 @@
+question	answer_a	answer_b	answer_c	answer_d	correct	comment	author
+What does HTML stand for?	HyperText Markup Language	HighText Machine Language	Hyper Transfer Main Language	Home Tool Markup Language	A	HTML is the standard markup language used to structure web pages.	Karabash
+Which language runs natively in a web browser?	Java	C++	JavaScript	Go	C	JavaScript is executed directly by modern browsers.	Karabash
+What file extension is used here for tab-separated data?	.csv	.tsv	.json	.xml	B	TSV means tab-separated values.	Karabash
